@@ -21,8 +21,8 @@ export class Cart {
   items!: Item[];
 
   constructor(
-    id: string = `${(CartModel.getCarts()?.length || 0) + 1}`,
     userId: string,
+    id: string = `${(CartModel.getCarts()?.length || 0) + 1}`,
     items: Item[] = [],
     status: CartStatusEnum = CartStatusEnum.Pending
   ) {

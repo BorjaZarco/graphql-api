@@ -14,6 +14,6 @@ export class ItemUpdatedHandler {
       cart.items.push(event.item);
     }
 
-    CartModel.updateCart(new Cart(cart.id, cart.userId, cart.items));
+    CartModel.updateCart(new Cart(cart.userId, cart.id, cart.items));
   }
 }
