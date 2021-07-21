@@ -1,12 +1,15 @@
 import { Arg, Mutation, Query, Resolver } from 'type-graphql';
-import { Cart, CartInput } from './cart.entity';
+import eventStore from '../../core/event-store/event-store';
+import { CartModel } from './cart.model';
+import { Cart, CartCreatedInput } from './dtos/cart.dto';
+import { CartCreatedEvent } from './events/cart-created.event';
 
 @Resolver()
 export class CartResolver {
   @Query(() => [Cart])
   async getCarts() {
     try {
-      return Cart.find();
+      return CartModel.getCarts();
     } catch (error) {
       console.error(error);
       return [];
@@ -18,15 +21,14 @@ export class CartResolver {
     return 'not implemented yet';
   }
 
-  @Mutation(() => Cart)
-  async createCart(@Arg('data', () => CartInput) data: CartInput) {
+  @Mutation(() => Boolean)
+  async createCart(@Arg('data', () => CartCreatedInput) data: CartCreatedInput) {
     try {
-      const cart = await Cart.insert(data.items);
-      console.log(cart);
-
-      return cart;
+      eventStore.execute(new CartCreatedEvent(data.userId));
+      return true;
     } catch (error) {
       console.error(error);
+      return false;
     }
   }
 
