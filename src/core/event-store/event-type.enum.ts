@@ -1,4 +1,4 @@
 export enum EventTypeEnum {
   CartCreated = 'cart-created',
-  CartUpdated = 'cart-updated',
+  ItemUpdated = 'item-updated',
 }
