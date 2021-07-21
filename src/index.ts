@@ -1,10 +1,13 @@
 import express from 'express';
 import 'reflect-metadata';
 import { initGraphql } from './graphql/graphql';
+import { MongoRepository } from './repostory/mongo/mongo.repostory';
 
 async function main() {
   try {
     const app = express();
+
+    await MongoRepository.connectToMongo();
 
     const graphqlServer = await initGraphql();
     app.use('/graphql', graphqlServer);
