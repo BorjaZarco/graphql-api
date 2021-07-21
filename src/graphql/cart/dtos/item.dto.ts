@@ -3,19 +3,19 @@ import { Field, ID, InputType, ObjectType } from 'type-graphql';
 @ObjectType()
 export class Item {
   @Field(() => ID)
-  sku!: String;
+  sku!: string;
 
   @Field()
   price!: number;
 
   @Field()
-  barcode!: String;
+  barcode!: string;
 
   @Field()
-  color!: String;
+  color!: string;
 
   @Field()
-  size!: String;
+  size!: string;
 
   @Field()
   quantity!: number;
@@ -24,19 +24,19 @@ export class Item {
 @InputType()
 export class ItemInput {
   @Field(() => ID)
-  sku!: String;
+  sku!: string;
 
   @Field()
   price!: number;
 
   @Field()
-  barcode!: String;
+  barcode!: string;
 
   @Field()
-  color!: String;
+  color!: string;
 
   @Field()
-  size!: String;
+  size!: string;
 
   @Field()
   quantity!: number;
