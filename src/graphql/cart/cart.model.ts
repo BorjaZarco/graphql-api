@@ -1,29 +1,22 @@
+import { CartEntity } from '../../repostory/mongo/schemas/cart.entity';
 import { Cart } from './dtos/cart.dto';
 
 const carts: Record<string, Cart> = {};
 
 export class CartModel {
   static getCarts() {
-    return Object.values(carts);
+    return CartEntity.find().lean().exec();
   }
 
   static getCart(cartId: string) {
-    return carts[cartId];
+    return CartEntity.findById(cartId).lean().exec();
   }
 
   static createCart(cart: Cart) {
-    carts[cart.id] = cart;
-    return cart;
+    return CartEntity.create(cart);
   }
 
   static updateCart(cart: Cart) {
-    carts[cart.id] = cart;
-    return cart;
-  }
-
-  static deleteCart(cartId: string) {
-    const cart = carts[cartId];
-    delete carts[cartId];
-    return cart;
+    return CartEntity.findByIdAndUpdate(cart.id, cart).exec();
   }
 }

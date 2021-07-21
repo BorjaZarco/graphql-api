@@ -11,16 +11,21 @@ export class CartResolver {
   @Query(() => [Cart])
   async getCarts() {
     try {
-      return CartModel.getCarts();
+      return await CartModel.getCarts();
     } catch (error) {
       console.error(error);
       return [];
     }
   }
 
-  @Query(() => String)
-  getOrderStatus() {
-    return 'not implemented yet';
+  @Query(() => Cart)
+  async getCart(@Arg('cartId', () => String) cartId: string) {
+    try {
+      return await CartModel.getCart(cartId);
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
   }
 
   @Mutation(() => Boolean)
