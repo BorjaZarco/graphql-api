@@ -1,5 +1,4 @@
 import { Field, ID, InputType, ObjectType } from 'type-graphql';
-import { ObjectID } from 'typeorm';
 
 @ObjectType()
 export class Item {
@@ -25,7 +24,13 @@ export class Item {
 @InputType()
 export class ItemInput {
   @Field(() => ID)
-  id!: ObjectID;
+  sku!: String;
+
+  @Field()
+  price!: number;
+
+  @Field()
+  barcode!: String;
 
   @Field()
   color!: String;
