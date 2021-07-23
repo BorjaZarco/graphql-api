@@ -3,6 +3,7 @@ import eventStore from '../../core/event-store/event-store';
 import { CartModel } from './cart.model';
 import { Cart, CartCreatedInput } from './dtos/cart.dto';
 import { ItemInput } from './dtos/item.dto';
+import { AddressUpdatedEvent } from './events/address-updated.event';
 import { CartCreatedEvent } from './events/cart-created.event';
 import { ItemUpdatedEvent } from './events/item-updated.event';
 
@@ -42,7 +43,7 @@ export class CartResolver {
   @Mutation(() => Boolean)
   async updateItemInCart(@Arg('cartId') cartId: string, @Arg('item', () => ItemInput) item: ItemInput) {
     try {
-      await eventStore.execute(new ItemUpdatedEvent(cartId, item));
+      await eventStore.execute(new ItemUpdatedEvent({ cartId, item }));
       return true;
     } catch (error) {
       console.error(error);
@@ -51,17 +52,23 @@ export class CartResolver {
   }
 
   @Mutation(() => String)
-  updateAddress() {
-    return 'not implemented yet';
+  async updateAddress(@Arg('cartId') cartId: string, @Arg('address') address: string) {
+    try {
+      await eventStore.execute(new AddressUpdatedEvent({ cartId, address }));
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
   }
 
-  @Mutation(() => String)
-  confirmPayment() {
-    return 'not implemented yet';
-  }
+  // @Mutation(() => String)
+  // confirmPayment() {
+  //   return 'not implemented yet';
+  // }
 
-  @Mutation(() => String)
-  cancelOrder() {
-    return 'not implemented yet';
-  }
+  // @Mutation(() => String)
+  // cancelOrder() {
+  //   return 'not implemented yet';
+  // }
 }
