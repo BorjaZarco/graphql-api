@@ -1,6 +1,7 @@
 export enum EventTypeEnum {
-  CartCreated = 'cart-created',
-  ItemUpdated = 'item-updated',
-  AddressUpdated = 'address-updated',
-  PaymentConfirmed = 'payment-confirmed',
+  CartCreated = 'CartCreated',
+  ItemUpdated = 'ItemUpdated',
+  AddressUpdated = 'AddressUpdated',
+  PaymentConfirmed = 'PaymentConfirmed',
+  OrderCancelled = 'OrderCancelled',
 }
