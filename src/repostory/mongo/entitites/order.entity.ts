@@ -1,5 +1,6 @@
 import { model, Schema } from 'mongoose';
 import { Cart } from '../../../graphql/cart/dtos/cart.dto';
+import { Order } from '../../../graphql/order/dtos/order.dto';
 import { OrderStatusEnum } from '../../../types/enums/order-status.enum';
 import { ItemSchema } from './item.entity';
 
@@ -39,4 +40,4 @@ OrderSchema.set('toObject', {
   virtuals: true,
 });
 
-export const CartEntity = model<Cart>('orders', OrderSchema);
+export const OrderEntity = model<Order>('orders', OrderSchema);
