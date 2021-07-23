@@ -3,6 +3,7 @@ import { EventTypeEnum } from '../../../core/event-store/event-type.enum';
 
 const EventSchema = new Schema({
   type: { type: String, enum: [...Object.values(EventTypeEnum)] },
+  data: { type: Schema.Types.Mixed },
 });
 
 // Duplicate the ID field.
