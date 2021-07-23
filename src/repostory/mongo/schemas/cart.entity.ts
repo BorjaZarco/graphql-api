@@ -1,20 +1,21 @@
 import { model, Schema } from 'mongoose';
 import { Cart } from '../../../graphql/cart/dtos/cart.dto';
-
-const ItemSchema = new Schema({
-  sku: { type: String },
-  price: { type: Number },
-  barcode: { type: String },
-  color: { type: String },
-  size: { type: String },
-  quantity: { type: Number },
-});
+import { ItemSchema } from './item.entity';
 
 const CartSchema = new Schema({
   userId: { type: String },
-  status: { type: String },
   totalPrice: { type: Number },
   items: [ItemSchema],
+});
+
+// Duplicate the ID field.
+CartSchema.virtual('id').get(function (this: any) {
+  return this._id.toHexString();
+});
+
+// Ensure virtual fields are serialised.
+CartSchema.set('toObject', {
+  virtuals: true,
 });
 
 export const CartEntity = model<Cart>('carts', CartSchema);
