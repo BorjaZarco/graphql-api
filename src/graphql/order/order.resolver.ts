@@ -5,7 +5,7 @@ import { OrderCreatedEvent } from './events/order-created.event';
 import { PaymentConfirmedEvent } from './events/payment-confirmed.event';
 
 @Resolver()
-export class CartResolver {
+export class OrderResolver {
   @Mutation(() => String)
   async createOrder(@Arg('cartId') cartId: string) {
     try {
