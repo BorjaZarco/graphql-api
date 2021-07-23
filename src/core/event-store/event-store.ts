@@ -1,13 +1,13 @@
+import { EventEntity } from '../../repostory/mongo/entitites/event.entity';
 import { IEvent } from './event-message.interface';
 import { EventHandlers } from './event.handlers';
 
-const store: Record<string, IEvent> = {};
-
 class EventStore {
-  execute(event: IEvent) {
-    const eventId: string = `${Object.keys(store).length + 1}`;
-    store[eventId] = { ...event, id: eventId };
-    EventHandlers.handle(event);
+  async execute(event: IEvent) {
+    // store the event
+    await EventEntity.create(event);
+    // call event handler, do not wait for it
+    void EventHandlers.handle(event);
   }
 }
 

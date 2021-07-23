@@ -31,7 +31,7 @@ export class CartResolver {
   @Mutation(() => Boolean)
   async createCart(@Arg('data', () => CartCreatedInput) data: CartCreatedInput) {
     try {
-      eventStore.execute(new CartCreatedEvent(data.userId));
+      await eventStore.execute(new CartCreatedEvent(data.userId));
       return true;
     } catch (error) {
       console.error(error);
@@ -40,9 +40,9 @@ export class CartResolver {
   }
 
   @Mutation(() => Boolean)
-  updateItemInCart(@Arg('cartId') cartId: string, @Arg('item', () => ItemInput) item: ItemInput) {
+  async updateItemInCart(@Arg('cartId') cartId: string, @Arg('item', () => ItemInput) item: ItemInput) {
     try {
-      eventStore.execute(new ItemUpdatedEvent(cartId, item));
+      await eventStore.execute(new ItemUpdatedEvent(cartId, item));
       return true;
     } catch (error) {
       console.error(error);
