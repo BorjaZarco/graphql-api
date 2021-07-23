@@ -5,6 +5,6 @@ import { CartCreatedEvent } from '../events/cart-created.event';
 export class CartCreatedHandler {
   static handle(event: CartCreatedEvent) {
     console.log('Cart created!!');
-    CartModel.createCart(new Cart(event.userId));
+    CartModel.createCart(new Cart(event.data.userId));
   }
 }
