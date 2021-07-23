@@ -4,6 +4,7 @@ import { ItemSchema } from './item.entity';
 
 const CartSchema = new Schema({
   userId: { type: String },
+  address: { type: String },
   totalPrice: { type: Number },
   items: [ItemSchema],
 });

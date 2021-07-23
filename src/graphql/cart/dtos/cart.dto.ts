@@ -9,6 +9,9 @@ export class Cart {
   @Field(() => ID)
   userId!: string;
 
+  @Field(() => ID)
+  address!: string;
+
   @Field(() => Float)
   totalPrice!: number;
 
