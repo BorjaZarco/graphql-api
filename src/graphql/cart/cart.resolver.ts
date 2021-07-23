@@ -24,7 +24,7 @@ export class CartResolver {
       return await CartModel.getCart(cartId);
     } catch (error) {
       console.error(error);
-      return [];
+      return null;
     }
   }
 
