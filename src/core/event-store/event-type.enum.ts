@@ -4,4 +4,5 @@ export enum EventTypeEnum {
   AddressUpdated = 'AddressUpdated',
   PaymentConfirmed = 'PaymentConfirmed',
   OrderCancelled = 'OrderCancelled',
+  OrderCreated = 'OrderCreated',
 }

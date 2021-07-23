@@ -16,8 +16,8 @@ export class Order {
   @Field(() => [Item])
   items!: Item[];
 
-  paymentConfirmation!: string;
-  isCancelled!: boolean;
+  paymentConfirmation?: string;
+  isCancelled?: boolean;
 
   constructor(userId: string, items: Item[] = [], status: OrderStatusEnum = OrderStatusEnum.Pending) {
     this.userId = userId;
