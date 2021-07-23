@@ -5,11 +5,11 @@ const carts: Record<string, Cart> = {};
 
 export class CartModel {
   static getCarts() {
-    return CartEntity.find().lean().exec();
+    return CartEntity.find().exec();
   }
 
   static getCart(cartId: string) {
-    return CartEntity.findById(cartId).lean().exec();
+    return CartEntity.findById(cartId).exec();
   }
 
   static createCart(cart: Cart) {
