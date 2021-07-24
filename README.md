@@ -7,3 +7,5 @@ This is a GraphQL API that acts as a backend service for a shop app. It allows t
 ### Apollo vs GraphQl-Express
 
 Having tried both, I have not seen any difference other than simplicity. This fact made me choose graphql-express over apollo, since its implementation is much simpler and understandable.
+
+NOTE: Apollo was finally chosen since it had more documentation on auth and subscriptions

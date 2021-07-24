@@ -1,7 +1,8 @@
+import { ApolloServer } from 'apollo-server-express';
 import express from 'express';
 import 'reflect-metadata';
-import { initGraphql } from './graphql/graphql';
 import { MongoRepository } from './repostory/mongo/mongo.repostory';
+import { GraphqlService } from './services/graphql.service';
 
 async function main() {
   try {
@@ -9,14 +10,19 @@ async function main() {
 
     await MongoRepository.connectToMongo();
 
-    const graphqlServer = await initGraphql();
-    app.use('/graphql', graphqlServer);
+    const graphqlSchema = await GraphqlService.generateGraphqlSchema();
+    const apolloServer = new ApolloServer({
+      schema: graphqlSchema,
+      context: ({ req, res }) => ({ req, res }),
+    });
+    apolloServer.applyMiddleware({ app });
 
-    app.listen(5000, () => {
+    const PORT = 5000;
+    app.listen(PORT, () => {
       console.log(`
-        \r****************************
-        \r** Listening on port 5000 **
-        \r****************************
+        \r***************************************************
+        \r** Listening on http://localhost:${PORT}/graphql **
+        \r***************************************************
       `);
     });
   } catch (error) {
