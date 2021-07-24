@@ -1,4 +1,4 @@
-import { Arg, Mutation, Query, Resolver } from 'type-graphql';
+import { Arg, Authorized, Mutation, Query, Resolver } from 'type-graphql';
 import eventStore from '../../core/event-store/event-store';
 import { CartModel } from './cart.model';
 import { Cart, CartCreatedInput } from './dtos/cart.dto';
@@ -10,6 +10,7 @@ import { ItemUpdatedEvent } from './events/item-updated.event';
 @Resolver()
 export class CartResolver {
   @Query(() => [Cart])
+  @Authorized()
   async getCarts() {
     try {
       return await CartModel.getCarts();
@@ -20,6 +21,7 @@ export class CartResolver {
   }
 
   @Query(() => Cart)
+  @Authorized()
   async getCart(@Arg('cartId', () => String) cartId: string) {
     try {
       return await CartModel.getCart(cartId);
@@ -30,6 +32,7 @@ export class CartResolver {
   }
 
   @Mutation(() => Boolean)
+  @Authorized()
   async createCart(@Arg('data', () => CartCreatedInput) data: CartCreatedInput) {
     try {
       await eventStore.execute(new CartCreatedEvent(data.userId));
@@ -41,6 +44,7 @@ export class CartResolver {
   }
 
   @Mutation(() => Boolean)
+  @Authorized()
   async updateItemInCart(@Arg('cartId') cartId: string, @Arg('item', () => ItemInput) item: ItemInput) {
     try {
       await eventStore.execute(new ItemUpdatedEvent({ cartId, item }));
@@ -52,6 +56,7 @@ export class CartResolver {
   }
 
   @Mutation(() => String)
+  @Authorized()
   async updateAddress(@Arg('cartId') cartId: string, @Arg('address') address: string) {
     try {
       await eventStore.execute(new AddressUpdatedEvent({ cartId, address }));
@@ -61,14 +66,4 @@ export class CartResolver {
       return false;
     }
   }
-
-  // @Mutation(() => String)
-  // confirmPayment() {
-  //   return 'not implemented yet';
-  // }
-
-  // @Mutation(() => String)
-  // cancelOrder() {
-  //   return 'not implemented yet';
-  // }
 }

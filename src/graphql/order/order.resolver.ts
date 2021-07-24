@@ -1,4 +1,4 @@
-import { Arg, Mutation, Resolver } from 'type-graphql';
+import { Arg, Authorized, Mutation, Resolver } from 'type-graphql';
 import eventStore from '../../core/event-store/event-store';
 import { OrderCancelledEvent } from './events/order-cancelled.event';
 import { OrderCreatedEvent } from './events/order-created.event';
@@ -7,6 +7,7 @@ import { PaymentConfirmedEvent } from './events/payment-confirmed.event';
 @Resolver()
 export class OrderResolver {
   @Mutation(() => String)
+  @Authorized()
   async createOrder(@Arg('cartId') cartId: string) {
     try {
       await eventStore.execute(new OrderCreatedEvent({ cartId }));
@@ -18,6 +19,7 @@ export class OrderResolver {
   }
 
   @Mutation(() => String)
+  @Authorized()
   async confirmPayment(@Arg('orderId') orderId: string, @Arg('paymentConfirmation') paymentConfirmation: string) {
     try {
       await eventStore.execute(new PaymentConfirmedEvent({ orderId, paymentConfirmation }));
@@ -29,6 +31,7 @@ export class OrderResolver {
   }
 
   @Mutation(() => String)
+  @Authorized()
   async cancelOrder(@Arg('orderId') orderId: string) {
     try {
       await eventStore.execute(new OrderCancelledEvent({ orderId }));
