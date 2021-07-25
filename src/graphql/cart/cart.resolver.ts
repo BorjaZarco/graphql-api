@@ -26,7 +26,7 @@ export class CartResolver {
     subscribe: withFilter(
       () => EventStore.listen<Cart>([EventTypeEnum.CartCreated, EventTypeEnum.AddressUpdated, EventTypeEnum.ItemUpdated]),
       (cart: Cart, _, context: IContext) => {
-        return cart.userId === context.requestUser?._id;
+        return `${cart.userId}` === `${context.requestUser?._id}`;
       }
     ),
   })
