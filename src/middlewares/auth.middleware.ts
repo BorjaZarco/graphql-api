@@ -10,6 +10,10 @@ export class AuthMiddleware {
       throw new Error('You must provide an auth token');
     }
 
-    return await AuthService.verifyToken(token);
+    const user = await AuthService.verifyToken(token);
+    if (user) {
+      context.requestUser = user;
+    }
+    return !!user;
   };
 }
