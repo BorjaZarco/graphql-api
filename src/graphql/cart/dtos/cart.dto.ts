@@ -10,7 +10,7 @@ export class Cart {
   userId!: string;
 
   @Field(() => ID)
-  address!: string;
+  address?: string;
 
   @Field(() => Float)
   totalPrice!: number;
@@ -18,7 +18,8 @@ export class Cart {
   @Field(() => [Item])
   items!: Item[];
 
-  constructor(userId: string, items: Item[] = []) {
+  constructor(id: string, userId: string, items: Item[] = []) {
+    this.id = id;
     this.userId = userId;
     this.items = items;
     this.totalPrice = items.reduce((total, item) => total + (item?.quantity || 0) * (item?.price || 0), 0);
