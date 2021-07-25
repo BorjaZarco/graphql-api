@@ -1,4 +1,5 @@
 import { ApolloServer } from 'apollo-server-express';
+import dotenv from 'dotenv';
 import express from 'express';
 import http from 'http';
 import 'reflect-metadata';
@@ -7,6 +8,8 @@ import { GraphqlService } from './services/graphql.service';
 
 async function main() {
   try {
+    dotenv.config();
+
     const app = express();
 
     await MongoRepository.connectToMongo();
