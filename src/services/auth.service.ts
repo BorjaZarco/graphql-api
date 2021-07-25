@@ -1,4 +1,5 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
+import { User } from '../graphql/user/dtos/user.dto';
 import { UserModel } from '../graphql/user/user.model';
 
 const JWT_SECRET = 'SECRET';
@@ -15,9 +16,8 @@ export class AuthService {
     );
   }
 
-  static async verifyToken(token: string): Promise<boolean> {
+  static async verifyToken(token: string): Promise<User | null> {
     const decodedToken = jwt.verify(token, JWT_SECRET) as JwtPayload;
-    const user = await UserModel.getUser(decodedToken.userId);
-    return !!user;
+    return UserModel.getUser(decodedToken.userId);
   }
 }
