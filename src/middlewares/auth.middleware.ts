@@ -4,7 +4,8 @@ import { IContext } from '../types/definitions/context';
 
 export class AuthMiddleware {
   static check: AuthChecker<IContext> = async ({ context }): Promise<boolean> => {
-    const token = context?.req?.headers?.authorization;
+    const token = context?.req?.headers?.authorization || context?.connection?.context?.authorization;
+
     if (!token) {
       throw new Error('You must provide an auth token');
     }
