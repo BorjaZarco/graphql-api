@@ -13,6 +13,7 @@ export class EventStore {
     // call event handler, do not wait for it
     const newVersion = await EventHandlers.handle(event);
     EventStore.notify(event.type, JSON.parse(JSON.stringify(newVersion)));
+    return newVersion;
   }
 
   static notify<T>(eventName: EventTypeEnum, payload: T) {
