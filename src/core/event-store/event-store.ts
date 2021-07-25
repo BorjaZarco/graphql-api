@@ -11,7 +11,8 @@ export class EventStore {
     // store the event
     await EventEntity.create(event);
     // call event handler, do not wait for it
-    void EventHandlers.handle(event);
+    const newVersion = await EventHandlers.handle(event);
+    EventStore.notify(event.type, JSON.parse(JSON.stringify(newVersion)));
   }
 
   static notify<T>(eventName: EventTypeEnum, payload: T) {
