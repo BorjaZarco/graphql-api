@@ -12,6 +12,10 @@ export class CartModel {
     return CartEntity.findById(cartId).exec();
   }
 
+  static getUserCart(userId: string) {
+    return CartEntity.findById(userId).exec();
+  }
+
   static createCart(cart: Cart) {
     return CartEntity.create(cart);
   }
