@@ -1,31 +1,21 @@
 import { withFilter } from 'apollo-server-express';
-import { Arg, Authorized, Mutation, Query, Resolver, Root, Subscription } from 'type-graphql';
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver, Root, Subscription } from 'type-graphql';
 import { EventStore } from '../../core/event-store/event-store';
 import { EventTypeEnum } from '../../core/event-store/event-type.enum';
+import { IContext } from '../../types/definitions/context';
 import { CartModel } from './cart.model';
-import { Cart, CartCreatedInput } from './dtos/cart.dto';
+import { Cart } from './dtos/cart.dto';
 import { ItemInput } from './dtos/item.dto';
 import { AddressUpdatedEvent } from './events/address-updated.event';
 import { CartCreatedEvent } from './events/cart-created.event';
 import { ItemUpdatedEvent } from './events/item-updated.event';
 @Resolver()
 export class CartResolver {
-  @Query(() => [Cart])
-  @Authorized()
-  async getCarts() {
-    try {
-      return await CartModel.getCarts();
-    } catch (error) {
-      console.error(error);
-      return [];
-    }
-  }
-
   @Query(() => Cart)
   @Authorized()
-  async getCart(@Arg('cartId', () => String) cartId: string) {
+  async getCart(@Ctx() ctx: IContext) {
     try {
-      return await CartModel.getCart(cartId);
+      return await CartModel.getUserCart(ctx.requestUser?._id as string);
     } catch (error) {
       console.error(error);
       return null;
@@ -35,21 +25,21 @@ export class CartResolver {
   @Subscription({
     subscribe: withFilter(
       () => EventStore.listen<Cart>([EventTypeEnum.CartCreated, EventTypeEnum.AddressUpdated, EventTypeEnum.ItemUpdated]),
-      (cart: Cart, args: { cartId: string }) => {
-        return cart._id === args.cartId;
+      (cart: Cart, _, context: IContext) => {
+        return cart.userId === context.requestUser?._id;
       }
     ),
   })
   @Authorized()
-  subscribeToCart(@Root() cart: Cart, @Arg('cartId', () => String) cartId: string): Cart {
+  subscribeToCart(@Root() cart: Cart): Cart {
     return cart;
   }
 
   @Mutation(() => Boolean)
   @Authorized()
-  async createCart(@Arg('data', () => CartCreatedInput) data: CartCreatedInput) {
+  async createCart(@Ctx() ctx: IContext) {
     try {
-      await EventStore.execute(new CartCreatedEvent(data.userId));
+      await EventStore.execute(new CartCreatedEvent(ctx.requestUser?._id as string));
       return true;
     } catch (error) {
       console.error(error);
@@ -59,9 +49,18 @@ export class CartResolver {
 
   @Mutation(() => Boolean)
   @Authorized()
-  async updateItemInCart(@Arg('cartId') cartId: string, @Arg('item', () => ItemInput) item: ItemInput) {
+  async updateItemInCart(@Arg('item', () => ItemInput) item: ItemInput, @Ctx() ctx: IContext) {
     try {
-      await EventStore.execute(new ItemUpdatedEvent({ cartId, item }));
+      if (!ctx.requestUser?._id) {
+        throw new Error('You must be a registered user to perform this action');
+      }
+      const cart = await CartModel.getUserCart(ctx.requestUser?._id);
+      if (cart) {
+        await EventStore.execute(new ItemUpdatedEvent({ cartId: cart._id, item }));
+      } else {
+        const newCart = (await EventStore.execute(new CartCreatedEvent(ctx.requestUser?._id as string))) as Cart;
+        await EventStore.execute(new ItemUpdatedEvent({ cartId: newCart._id, item }));
+      }
       return true;
     } catch (error) {
       console.error(error);
@@ -71,9 +70,18 @@ export class CartResolver {
 
   @Mutation(() => String)
   @Authorized()
-  async updateAddress(@Arg('cartId') cartId: string, @Arg('address') address: string) {
+  async updateAddress(@Arg('address') address: string, @Ctx() ctx: IContext) {
     try {
-      await EventStore.execute(new AddressUpdatedEvent({ cartId, address }));
+      if (!ctx.requestUser?._id) {
+        throw new Error('You must be a registered user to perform this action');
+      }
+      const cart = await CartModel.getUserCart(ctx.requestUser?._id);
+      if (cart) {
+        await EventStore.execute(new AddressUpdatedEvent({ cartId: cart._id, address }));
+      } else {
+        const newCart = (await EventStore.execute(new CartCreatedEvent(ctx.requestUser?._id as string))) as Cart;
+        await EventStore.execute(new AddressUpdatedEvent({ cartId: newCart._id, address }));
+      }
       return true;
     } catch (error) {
       console.error(error);
