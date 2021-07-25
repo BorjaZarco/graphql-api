@@ -17,8 +17,6 @@ export class CartModel {
   }
 
   static updateCart(id: string, cart: Partial<Cart>) {
-    console.log(`Updating cart ${cart.id} - ${JSON.stringify(cart)}`);
-
     return CartEntity.findByIdAndUpdate(id, cart, {
       new: true,
       runValidators: true,

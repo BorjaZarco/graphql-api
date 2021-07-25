@@ -17,8 +17,6 @@ export class OrderModel {
   }
 
   static updateOrder(id: string, order: Partial<Order>) {
-    console.log(`Updating order ${order.id} - ${JSON.stringify(order)}`);
-
     return OrderEntity.findByIdAndUpdate(id, order, {
       new: true,
       runValidators: true,

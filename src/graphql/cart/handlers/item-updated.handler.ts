@@ -3,7 +3,6 @@ import { ItemUpdatedEvent } from '../events/item-updated.event';
 
 export class ItemUpdatedHandler {
   static async handle(event: ItemUpdatedEvent) {
-    console.log('Cart items updated!!');
     const eventData = event.data;
 
     const cart = await CartModel.getCart(eventData.cartId);
