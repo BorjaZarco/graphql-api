@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.ts --exec ts-node"
+    "prod": "cp ./environments/.env.prod ./.env && ts-node src/index.ts",
+    "dev": "cp ./environments/.env.dev ./.env && nodemon src/index.ts --exec ts-node",
+    "wprod": "copy .\\environments\\.env.prod .\\.env && ts-node src/index.ts",
+    "wdev": "copy .\\environments\\.env.dev .\\.env && nodemon src/index.ts --exec ts-node"
   },
   "keywords": [],
   "author": "",
