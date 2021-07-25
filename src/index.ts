@@ -15,6 +15,9 @@ async function main() {
     const apolloServer = new ApolloServer({
       schema: graphqlSchema,
       context: ({ req, res, connection }) => ({ req, res, connection }),
+      subscriptions: {
+        path: '/subscriptions',
+      },
     });
     apolloServer.applyMiddleware({ app });
 
