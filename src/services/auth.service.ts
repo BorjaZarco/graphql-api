@@ -2,8 +2,8 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { User } from '../graphql/user/dtos/user.dto';
 import { UserModel } from '../graphql/user/user.model';
 
-const JWT_SECRET = 'SECRET';
-const JWT_EXPIRATION = 3600;
+const JWT_SECRET = process.env.JWT_SECRET || 'SECRET';
+const JWT_EXPIRATION = process.env.JWT_EXPIRATION || 3600;
 
 export class AuthService {
   static generateToken(userId: string) {
