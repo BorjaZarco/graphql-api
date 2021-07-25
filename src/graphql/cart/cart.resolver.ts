@@ -1,12 +1,13 @@
+import { withFilter } from 'apollo-server-express';
 import { Arg, Authorized, Mutation, Query, Resolver, Root, Subscription } from 'type-graphql';
 import { EventStore } from '../../core/event-store/event-store';
+import { EventTypeEnum } from '../../core/event-store/event-type.enum';
 import { CartModel } from './cart.model';
 import { Cart, CartCreatedInput } from './dtos/cart.dto';
 import { ItemInput } from './dtos/item.dto';
 import { AddressUpdatedEvent } from './events/address-updated.event';
 import { CartCreatedEvent } from './events/cart-created.event';
 import { ItemUpdatedEvent } from './events/item-updated.event';
-
 @Resolver()
 export class CartResolver {
   @Query(() => [Cart])
@@ -29,6 +30,19 @@ export class CartResolver {
       console.error(error);
       return null;
     }
+  }
+
+  @Subscription({
+    subscribe: withFilter(
+      () => EventStore.listen<Cart>([EventTypeEnum.CartCreated, EventTypeEnum.AddressUpdated, EventTypeEnum.ItemUpdated]),
+      (cart: Cart, args: { cartId: string }) => {
+        return cart._id === args.cartId;
+      }
+    ),
+  })
+  @Authorized()
+  subscribeToCart(@Root() cart: Cart, @Arg('cartId', () => String) cartId: string): Cart {
+    return cart;
   }
 
   @Mutation(() => Boolean)
@@ -65,18 +79,5 @@ export class CartResolver {
       console.error(error);
       return false;
     }
-  }
-
-  @Subscription({
-    topics: 'CARTS',
-    filter: ({ payload, args }: { payload: Cart; args: string }) => {
-      console.log(args);
-      console.log(payload);
-      return true;
-    },
-  })
-  @Authorized()
-  subscribeToCart(@Root() cart: Cart, @Arg('cartId', () => String) cartId: string): Cart {
-    return cart;
   }
 }
