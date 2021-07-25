@@ -1,5 +1,4 @@
 import { CartModel } from '../cart.model';
-import { Cart } from '../dtos/cart.dto';
 import { ItemUpdatedEvent } from '../events/item-updated.event';
 
 export class ItemUpdatedHandler {
@@ -16,7 +15,7 @@ export class ItemUpdatedHandler {
         cart.items.push(eventData.item);
       }
 
-      CartModel.updateCart(cart.id, new Cart(cart.userId, cart.items));
+      return CartModel.updateCart(cart.id, { items: cart.items });
     }
   }
 }
