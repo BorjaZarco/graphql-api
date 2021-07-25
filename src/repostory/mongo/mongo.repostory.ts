@@ -1,9 +1,7 @@
 import { connect } from 'mongoose';
 import { Connection } from 'typeorm';
 
-// export function getMongoRepostory<T>(entityClass: EntityTarget<T>) {
-//   return getMongoRepository(entityClass);
-// }
+const MONGO_URL = 'mongodb://localhost:27017/graphql';
 
 const MONGO_OPTIONS = {
   useNewUrlParser: true,
@@ -18,7 +16,7 @@ export class MongoRepository {
   constructor() {}
 
   static async connectToMongo() {
-    await connect('mongodb://localhost:27017/graphql', MONGO_OPTIONS);
+    await connect(MONGO_URL, MONGO_OPTIONS);
     console.log('Mongo is connected correctly!!');
   }
 }
