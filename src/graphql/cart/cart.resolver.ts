@@ -39,7 +39,7 @@ export class CartResolver {
   @Authorized()
   async createCart(@Ctx() ctx: IContext) {
     try {
-      await EventStore.execute(new CartCreatedEvent(ctx.requestUser?._id as string));
+      await EventStore.execute(new CartCreatedEvent({ cartId: ctx.requestUser?._id as string, userId: ctx.requestUser?._id as string }));
       return true;
     } catch (error) {
       console.error(error);
@@ -58,7 +58,9 @@ export class CartResolver {
       if (cart) {
         await EventStore.execute(new ItemUpdatedEvent({ cartId: cart._id, item }));
       } else {
-        const newCart = (await EventStore.execute(new CartCreatedEvent(ctx.requestUser?._id as string))) as Cart;
+        const newCart = (await EventStore.execute(
+          new CartCreatedEvent({ cartId: ctx.requestUser?._id as string, userId: ctx.requestUser?._id as string })
+        )) as Cart;
         await EventStore.execute(new ItemUpdatedEvent({ cartId: newCart._id, item }));
       }
       return true;
@@ -79,7 +81,9 @@ export class CartResolver {
       if (cart) {
         await EventStore.execute(new AddressUpdatedEvent({ cartId: cart._id, address }));
       } else {
-        const newCart = (await EventStore.execute(new CartCreatedEvent(ctx.requestUser?._id as string))) as Cart;
+        const newCart = (await EventStore.execute(
+          new CartCreatedEvent({ cartId: ctx.requestUser?._id as string, userId: ctx.requestUser?._id as string })
+        )) as Cart;
         await EventStore.execute(new AddressUpdatedEvent({ cartId: newCart._id, address }));
       }
       return true;
