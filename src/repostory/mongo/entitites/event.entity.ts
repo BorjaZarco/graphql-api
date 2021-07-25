@@ -6,14 +6,4 @@ const EventSchema = new Schema({
   data: { type: Schema.Types.Mixed },
 });
 
-// Duplicate the ID field.
-EventSchema.virtual('id').get(function (this: any) {
-  return this._id.toHexString();
-});
-
-// Ensure virtual fields are serialised.
-EventSchema.set('toObject', {
-  virtuals: true,
-});
-
 export const EventEntity = model<Event>('event-store', EventSchema, 'event-store');

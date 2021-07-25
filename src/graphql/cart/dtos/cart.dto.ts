@@ -4,7 +4,7 @@ import { Item } from './item.dto';
 @ObjectType()
 export class Cart {
   @Field(() => ID)
-  id?: string;
+  _id?: string;
 
   @Field(() => ID)
   userId!: string;
@@ -19,7 +19,7 @@ export class Cart {
   items!: Item[];
 
   constructor(id: string, userId: string, items: Item[] = []) {
-    this.id = id;
+    this._id = id;
     this.userId = userId;
     this.items = items;
     this.totalPrice = items.reduce((total, item) => total + (item?.quantity || 0) * (item?.price || 0), 0);

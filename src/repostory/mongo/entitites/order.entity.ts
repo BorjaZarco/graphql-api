@@ -19,11 +19,6 @@ const OrderSchema = new Schema({
   items: [ItemSchema],
 });
 
-// Duplicate the ID field.
-OrderSchema.virtual('id').get(function (this: IOrderSchema) {
-  return `${this._id}`;
-});
-
 // Get the satus of the order.
 OrderSchema.virtual('status').get(function (this: IOrderSchema) {
   if (this.isCancelled) {

@@ -5,7 +5,7 @@ import { Item } from '../../cart/dtos/item.dto';
 @ObjectType()
 export class Order {
   @Field(() => ID)
-  id!: string;
+  _id!: string;
 
   @Field(() => ID)
   userId!: string;

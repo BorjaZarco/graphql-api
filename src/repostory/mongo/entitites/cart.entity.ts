@@ -9,14 +9,4 @@ const CartSchema = new Schema({
   items: [ItemSchema],
 });
 
-// Duplicate the ID field.
-CartSchema.virtual('id').get(function (this: any) {
-  return this._id.toHexString();
-});
-
-// Ensure virtual fields are serialised.
-CartSchema.set('toObject', {
-  virtuals: true,
-});
-
 export const CartEntity = model<Cart>('carts', CartSchema);
