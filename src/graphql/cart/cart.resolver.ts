@@ -1,5 +1,5 @@
-import { Arg, Authorized, Mutation, Query, Resolver } from 'type-graphql';
-import eventStore from '../../core/event-store/event-store';
+import { Arg, Authorized, Mutation, Query, Resolver, Root, Subscription } from 'type-graphql';
+import { EventStore } from '../../core/event-store/event-store';
 import { CartModel } from './cart.model';
 import { Cart, CartCreatedInput } from './dtos/cart.dto';
 import { ItemInput } from './dtos/item.dto';
@@ -35,7 +35,7 @@ export class CartResolver {
   @Authorized()
   async createCart(@Arg('data', () => CartCreatedInput) data: CartCreatedInput) {
     try {
-      await eventStore.execute(new CartCreatedEvent(data.userId));
+      await EventStore.execute(new CartCreatedEvent(data.userId));
       return true;
     } catch (error) {
       console.error(error);
@@ -47,7 +47,7 @@ export class CartResolver {
   @Authorized()
   async updateItemInCart(@Arg('cartId') cartId: string, @Arg('item', () => ItemInput) item: ItemInput) {
     try {
-      await eventStore.execute(new ItemUpdatedEvent({ cartId, item }));
+      await EventStore.execute(new ItemUpdatedEvent({ cartId, item }));
       return true;
     } catch (error) {
       console.error(error);
@@ -59,11 +59,24 @@ export class CartResolver {
   @Authorized()
   async updateAddress(@Arg('cartId') cartId: string, @Arg('address') address: string) {
     try {
-      await eventStore.execute(new AddressUpdatedEvent({ cartId, address }));
+      await EventStore.execute(new AddressUpdatedEvent({ cartId, address }));
       return true;
     } catch (error) {
       console.error(error);
       return false;
     }
+  }
+
+  @Subscription({
+    topics: 'CARTS',
+    filter: ({ payload, args }: { payload: Cart; args: string }) => {
+      console.log(args);
+      console.log(payload);
+      return true;
+    },
+  })
+  @Authorized()
+  subscribeToCart(@Root() cart: Cart, @Arg('cartId', () => String) cartId: string): Cart {
+    return cart;
   }
 }
