@@ -10,36 +10,26 @@ const SALT_ROUNDS = 10;
 export class UserResolver {
   @Mutation(() => String)
   async signUp(@Arg('data', () => EmailInput) { email, password }: EmailInput) {
-    try {
-      const user = await UserModel.getUserByEmail(email);
-      if (user) {
-        throw new Error('Email already in use');
-      }
-
-      const newUser = await UserModel.createUser({ email, password: bycript.hashSync(password, SALT_ROUNDS) });
-      return AuthService.generateToken(newUser.id as string);
-    } catch (error) {
-      console.error(error);
-      return error;
+    const user = await UserModel.getUserByEmail(email);
+    if (user) {
+      throw new Error('Email already in use');
     }
+
+    const newUser = await UserModel.createUser({ email, password: bycript.hashSync(password, SALT_ROUNDS) });
+    return AuthService.generateToken(newUser.id as string);
   }
 
   @Mutation(() => String)
   async logIn(@Arg('data', () => EmailInput) { email, password }: EmailInput) {
-    try {
-      const user = await UserModel.getUserByEmail(email);
-      if (!user) {
-        throw new Error('User not found');
-      }
-
-      if (!bycript.compareSync(password, user.password)) {
-        throw new Error('Wrong password');
-      }
-
-      return AuthService.generateToken(user.id as string);
-    } catch (error) {
-      console.error(error);
-      return error;
+    const user = await UserModel.getUserByEmail(email);
+    if (!user) {
+      throw new Error('User not found');
     }
+
+    if (!bycript.compareSync(password, user.password)) {
+      throw new Error('Wrong password');
+    }
+
+    return AuthService.generateToken(user.id as string);
   }
 }

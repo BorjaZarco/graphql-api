@@ -15,6 +15,9 @@ async function main() {
     const apolloServer = new ApolloServer({
       schema: graphqlSchema,
       context: ({ req, res, connection }) => ({ req, res, connection }),
+      formatError: (gqlError) => {
+        return { message: gqlError.message };
+      },
       subscriptions: {
         path: '/subscriptions',
       },

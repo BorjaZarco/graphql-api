@@ -14,12 +14,7 @@ export class CartResolver {
   @Query(() => Cart)
   @Authorized()
   async getCart(@Ctx() ctx: IContext) {
-    try {
-      return await CartModel.getUserCart(ctx.requestUser?._id as string);
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
+    return await CartModel.getUserCart(ctx.requestUser?._id as string);
   }
 
   @Subscription({
@@ -38,58 +33,43 @@ export class CartResolver {
   @Mutation(() => Boolean)
   @Authorized()
   async createCart(@Ctx() ctx: IContext) {
-    try {
-      await EventStore.execute(new CartCreatedEvent({ cartId: ctx.requestUser?._id as string, userId: ctx.requestUser?._id as string }));
-      return true;
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
+    await EventStore.execute(new CartCreatedEvent({ cartId: ctx.requestUser?._id as string, userId: ctx.requestUser?._id as string }));
+    return true;
   }
 
   @Mutation(() => Boolean)
   @Authorized()
   async updateItemInCart(@Arg('item', () => ItemInput) item: ItemInput, @Ctx() ctx: IContext) {
-    try {
-      if (!ctx.requestUser?._id) {
-        throw new Error('You must be a registered user to perform this action');
-      }
-      const cart = await CartModel.getUserCart(ctx.requestUser?._id);
-      if (cart) {
-        await EventStore.execute(new ItemUpdatedEvent({ cartId: cart._id, item }));
-      } else {
-        const newCart = (await EventStore.execute(
-          new CartCreatedEvent({ cartId: ctx.requestUser?._id as string, userId: ctx.requestUser?._id as string })
-        )) as Cart;
-        await EventStore.execute(new ItemUpdatedEvent({ cartId: newCart._id, item }));
-      }
-      return true;
-    } catch (error) {
-      console.error(error);
-      return false;
+    if (!ctx.requestUser?._id) {
+      throw new Error('You must be a registered user to perform this action');
     }
+    const cart = await CartModel.getUserCart(ctx.requestUser?._id);
+    if (cart) {
+      await EventStore.execute(new ItemUpdatedEvent({ cartId: cart._id, item }));
+    } else {
+      const newCart = (await EventStore.execute(
+        new CartCreatedEvent({ cartId: ctx.requestUser?._id as string, userId: ctx.requestUser?._id as string })
+      )) as Cart;
+      await EventStore.execute(new ItemUpdatedEvent({ cartId: newCart._id, item }));
+    }
+    return true;
   }
 
   @Mutation(() => String)
   @Authorized()
   async updateAddress(@Arg('address') address: string, @Ctx() ctx: IContext) {
-    try {
-      if (!ctx.requestUser?._id) {
-        throw new Error('You must be a registered user to perform this action');
-      }
-      const cart = await CartModel.getUserCart(ctx.requestUser?._id);
-      if (cart) {
-        await EventStore.execute(new AddressUpdatedEvent({ cartId: cart._id, address }));
-      } else {
-        const newCart = (await EventStore.execute(
-          new CartCreatedEvent({ cartId: ctx.requestUser?._id as string, userId: ctx.requestUser?._id as string })
-        )) as Cart;
-        await EventStore.execute(new AddressUpdatedEvent({ cartId: newCart._id, address }));
-      }
-      return true;
-    } catch (error) {
-      console.error(error);
-      return false;
+    if (!ctx.requestUser?._id) {
+      throw new Error('You must be a registered user to perform this action');
     }
+    const cart = await CartModel.getUserCart(ctx.requestUser?._id);
+    if (cart) {
+      await EventStore.execute(new AddressUpdatedEvent({ cartId: cart._id, address }));
+    } else {
+      const newCart = (await EventStore.execute(
+        new CartCreatedEvent({ cartId: ctx.requestUser?._id as string, userId: ctx.requestUser?._id as string })
+      )) as Cart;
+      await EventStore.execute(new AddressUpdatedEvent({ cartId: newCart._id, address }));
+    }
+    return true;
   }
 }
