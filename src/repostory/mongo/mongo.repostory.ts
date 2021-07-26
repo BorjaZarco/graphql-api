@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import { connect } from 'mongoose';
 
 dotenv.config();
-const MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost:27018/graphql';
+const MONGO_URL = process.env.MONGO_URL || 'mongodb://mongodb:27018/graphql';
 
 const MONGO_OPTIONS = {
   useNewUrlParser: true,
