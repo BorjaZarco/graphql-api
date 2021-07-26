@@ -7,7 +7,9 @@
     "prod": "cp ./environments/.env.prod ./.env && ts-node src/index.ts",
     "dev": "cp ./environments/.env.dev ./.env && nodemon src/index.ts --exec ts-node",
     "wprod": "copy .\\environments\\.env.prod .\\.env && ts-node src/index.ts",
-    "wdev": "copy .\\environments\\.env.dev .\\.env && nodemon src/index.ts --exec ts-node"
+    "wdev": "copy .\\environments\\.env.dev .\\.env && nodemon src/index.ts --exec ts-node",
+    "docker": "docker build -t graphql-api . && docker run -p 5000:5000 graphql-api",
+    "compose": "docker-compose -f docker-compose.yml up --build "
   },
   "keywords": [],
   "author": "",
