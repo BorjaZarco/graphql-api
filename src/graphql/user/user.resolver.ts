@@ -1,9 +1,11 @@
 import bycript from 'bcrypt';
+import dotenv from 'dotenv';
 import { Arg, Mutation, Resolver } from 'type-graphql';
 import { AuthService } from '../../services/auth.service';
 import { EmailInput } from './dtos/user.dto';
 import { UserModel } from './user.model';
 
+dotenv.config();
 const SALT_ROUNDS = process.env.SALT_ROUNDS || 10;
 
 @Resolver()

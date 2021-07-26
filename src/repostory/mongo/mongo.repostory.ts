@@ -1,7 +1,8 @@
+import dotenv from 'dotenv';
 import { connect } from 'mongoose';
-import { Connection } from 'typeorm';
 
-const MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost:27017/graphql';
+dotenv.config();
+const MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost:27018/graphql';
 
 const MONGO_OPTIONS = {
   useNewUrlParser: true,
@@ -11,8 +12,6 @@ const MONGO_OPTIONS = {
 };
 
 export class MongoRepository {
-  connection?: Connection;
-
   constructor() {}
 
   static async connectToMongo() {
