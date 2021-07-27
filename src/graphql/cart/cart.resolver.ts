@@ -51,8 +51,8 @@ export class CartResolver {
     if (!ctx.requestUser?._id) {
       throw new Error('You must be a registered user to perform this action');
     }
-    if (item.price < 0) {
-      throw new Error('Price should be a positive quantity');
+    if (item.price <= 0) {
+      throw new Error('Price should be equal or greater to zero');
     }
 
     const cart = await CartModel.getUserCart(ctx.requestUser?._id);
