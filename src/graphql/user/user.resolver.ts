@@ -6,7 +6,7 @@ import { EmailInput } from './dtos/user.dto';
 import { UserModel } from './user.model';
 
 dotenv.config();
-const SALT_ROUNDS = process.env.SALT_ROUNDS || 10;
+const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS as string) || 10;
 
 @Resolver()
 export class UserResolver {
