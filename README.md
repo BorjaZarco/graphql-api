@@ -169,8 +169,8 @@ This API can only be used by registered people. The registration is done by emai
 
 #### Mutations
 
-- `logIn`: send a email and password in order to obtain a token to access the API
-- `signUp`: register a new user by providing an unregistered email and password. If successful it will automatically log in and return a token to access the API
+- `logIn`: send a email and password in order to obtain a token to access the API.
+- `signUp`: register a new user by providing an unregistered email and password. If successful it will automatically log in and return a token to access the API.
 
 ### Cart
 
@@ -178,11 +178,11 @@ The main point of the business. It consists on a set of items, an address to whi
 
 #### Queries
 
-- `getCart`: get the cart of the user that is making the request
+- `getCart`: get the cart of the user that is making the request.
 
 #### Subscriptions
 
-- `subscribeToCart`: subscribe to the status of the cart that belongs to the user that is making the request
+- `subscribeToCart`: subscribe to the status of the cart that belongs to the user that is making the request.
 
 #### Mutations
 
@@ -192,7 +192,7 @@ The main point of the business. It consists on a set of items, an address to whi
 
 - `updateAddress`: update the address to which all items in the cart will be delivered once an order is placed.
 
-- `clearCart`: reset all cart items. This may be called after a cart payment is confirmed. The cart won't be cleared automatically once an order is made to give the user the possibility to make another order with the same items (and deliver it to a different address, for example)
+- `clearCart`: reset all cart items. This may be called after a cart payment is confirmed. The cart won't be cleared automatically once an order is made to give the user the possibility to make another order with the same items (and deliver it to a different address, for example).
 
 ### Orders
 
@@ -202,7 +202,7 @@ This stores the items that need to be sent to a user. It will also store a payme
 
 - `getOrder`: get an order by its id. The provided id must be of an order that belongs to the user that makes the request.
 
-- `getStatusOrder`: get an order current status. The possible status of an order are the following:
+- `getOrderStatus`: get an order current status. The possible status of an order are the following:
 
   - `Pending`: The order has been generated but it has neither been confirmed or cancelled.
   - `Confirmed`: The payment has been confirmed and the order has the payment confirmation BLOB stored.
@@ -210,8 +210,8 @@ This stores the items that need to be sent to a user. It will also store a payme
 
 #### Mutations
 
-- `createOrder`: it creates a new order. This order will contain the items that are in the user's cart at the moment the order is created. It will also store the address that the cart has at the moment is created. The cart must have at least one item and a deliver address when the order is created. otherwise it will throw an error
+- `createOrder`: it creates a new order. This order will contain the items that are in the user's cart at the moment the order is created. It will also store the address that the cart has at the moment is created. The cart must have at least one item and a deliver address when the order is created, otherwise it will throw an error.
 
-- `confirmPayment`: stores the confirment payment BLOB sent in the request. This may update the status of the order. A payment can be confirmed if the order is cancelled in order to store the payment blob just in case something went wrong and the quantity paid needs to be returned (eg. the order is cancelled before the payment is bank confirms the payment)
+- `confirmPayment`: stores the confirment payment BLOB sent in the request. This may update the status of the order. A payment can be confirmed if the order is cancelled in order to store the payment blob just in case something went wrong and the quantity paid needs to be returned (eg. the order is cancelled before the payment is bank confirms the payment).
 
 - `cancelOrder`: cancels an order. This may update the status of the order. An order can't be cancelled if it is already cancelled.
