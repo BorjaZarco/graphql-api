@@ -3,6 +3,6 @@ import { OrderModel } from '../order.model';
 
 export class PaymentConfirmedHandler {
   static handle(event: PaymentConfirmedEvent) {
-    OrderModel.updateOrder(event.data.orderId, { paymentConfirmation: event.data.paymentConfirmation });
+    return OrderModel.updateOrder(event.data.orderId, { paymentConfirmation: event.data.paymentConfirmation });
   }
 }

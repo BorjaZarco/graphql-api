@@ -3,6 +3,6 @@ import { OrderModel } from '../order.model';
 
 export class OrderCancelledHandler {
   static handle(event: OrderCancelledEvent) {
-    OrderModel.updateOrder(event.data.orderId, { isCancelled: true });
+    return OrderModel.updateOrder(event.data.orderId, { isCancelled: true });
   }
 }
