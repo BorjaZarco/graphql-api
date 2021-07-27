@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "ts-node src/index.ts",
     "prod": "cp ./environments/.env.prod ./.env && ts-node src/index.ts",
     "dev": "cp ./environments/.env.dev ./.env && nodemon src/index.ts --exec ts-node",
     "wprod": "copy .\\environments\\.env.prod .\\.env && ts-node src/index.ts",
