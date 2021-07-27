@@ -1,4 +1,4 @@
-import { Field, ID, InputType, ObjectType } from 'type-graphql';
+import { Field, ID, InputType, Int, ObjectType } from 'type-graphql';
 
 @ObjectType()
 export class Item {
@@ -17,7 +17,7 @@ export class Item {
   @Field()
   size!: string;
 
-  @Field()
+  @Field(() => Int)
   quantity!: number;
 }
 
@@ -38,6 +38,6 @@ export class ItemInput {
   @Field()
   size!: string;
 
-  @Field()
+  @Field(() => Int)
   quantity!: number;
 }
