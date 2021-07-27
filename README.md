@@ -18,6 +18,8 @@ This is a GraphQL API that acts as a backend service for a shop app. It allows t
   - [Users](#users)
   - [Cart](#cart)
   - [Orders](#orders)
+  - [Items](#items)
+- [References](#references)
 
 ## Getting started
 
@@ -88,16 +90,16 @@ Both `dev` and `prod` commands are prepared for unix-based systems. However, thi
 
 It is also prepared for [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/). In order to dockerize the project, you must first install and run docker on your device. The commands to run docker are:
 
-- `docker`: Builds a docker image and runs it on port 5000. It uses `prod` environment variables. In order to change the docker or localhost port, please modify the second part of the script, stablishing both ports as [the docker documentation states](https://docs.docker.com/config/containers/container-networking/):
+- `docker`: Builds a docker image and runs it on port 5000. It uses a `docker` environment variables. In order to change the docker or localhost port, please modify the second part of the script, stablishing both ports as [the docker documentation states](https://docs.docker.com/config/containers/container-networking/):
 
 ```
 $ docker run -p <CONTAINER_PORT>:<DOCKER_HOST>
 ```
 
-- `compose`: Builds a docker compose app. This app consists on the `graphql-api`, listening on port 5000 and a mongo database, as stated in the [compose configuration file](./public/docker-compose.yml). In order to connect to the mongo service, the `MONGO_URL` variable must be set to `mongodb://mongodb:27018/graphql`, as shown below:
+- `compose`: Builds a docker compose app. This app consists on the `graphql-api`, listening on port 5000 and a mongo database, as stated in the [compose configuration file](./public/docker-compose.yml). It also uses the environment variables located on a `.env.docker` file in the environments folder. Additionally, in order to connect to the mongo service, the `MONGO_URL` variable must be set to `mongodb://mongodb:27018/graphql`, as shown below:
 
 ```
-/environments/.env.prod
+/environments/.env.docker
   ...
   ...
   MONGO_URL=mongodb://mongodb:27018/graphql
@@ -114,6 +116,12 @@ The selected persistance provider for this project is [mongoDB](https://www.mong
 If you choose to use a local connection, you must have a mongo daemon installed and running on your device. Please follow the [official instructions](https://www.mongodb.com/try/download/community)
 
 Docker compose already sets up a mongo database as a service, so it is not required to have a local or remote database. With docker compose, you just need to connect your API container with your mongo container. In order to do so, the `MONGO_URL` variable must be set to `mongodb://mongodb:27018/graphql`.
+
+## Quick start
+
+This project can be easily tested running the docker-compose app and using [Hoppscotch](https://hoppscotch.io/es/graphql). This repository contains a [hoppscotch collection](./public/hoppscotch.json) that contains all the queries, subscriptions and mutations that can be done on the app. You just need to import the file on [Hoppscotch](https://hoppscotch.io/es/graphql) and have fun 😄!!
+
+Reminder that the compose app will be running on port 5000.
 
 ## Project decisions
 
@@ -215,3 +223,23 @@ This stores the items that need to be sent to a user. It will also store a payme
 - `confirmPayment`: stores the payment confirm BLOB sent in the request. This may update the status of the order. A payment can be confirmed if the order is cancelled in order to store the payment blob just in case something went wrong and the quantity paid needs to be returned (eg. the order is cancelled before the payment is bank confirms the payment). An order can be confirmed several times (to update the confirmation BLOB)
 
 - `cancelOrder`: cancels an order. This may update the status of the order. An order can't be cancelled if it is already cancelled.
+
+### Items
+
+This entity does not have any query or mutation by itself. It represents an item that can be added to a cart and ordered. Each item has an unique identifier, the `sku`. Two models of one product with different size and color will have different sku.
+
+## References
+
+Below are listed some of the most interesing and important references I used during the development of this project:
+
+- [Event sourcing by Martin Fowler](https://martinfowler.com/eaaDev/EventSourcing.html)
+- [Event Sourcing in practice](https://ookami86.github.io/event-sourcing-in-practice/)
+- [Event Sourcing and Concurrent Updates](https://teivah.medium.com/event-sourcing-and-concurrent-updates-32354ec26a4c)
+- [Event Sourcing with Examples in Node.js](https://blog.risingstack.com/event-sourcing-with-examples-node-js-at-scale/)
+- [Event-stream based GraphQL subscriptions for real-time updates](https://gist.github.com/OlegIlyenko/a5a9ab1b000ba0b5b1ad)
+- [Event driven API Strategies: from WebHooks to GraphQL Subscriptions](https://www.youtube.com/watch?v=E_0tSNHWwWA&t=1132s&ab_channel=NordicAPIs)
+- ["Turning the database inside out with Apache Samza" by Martin Kleppmann](https://www.youtube.com/watch?v=fU9hR3kiOK0&t=477s&=StrangeLoopConference)
+- [GraphQL Typescript Authentication Boilerplate](https://www.youtube.com/watch?v=OVdPOExxKuU&=BenAwad)
+- [Typescript GraphQL CRUD Tutorial](https://www.youtube.com/watch?v=WhzIjYQmWvs&t=1261s&ab_channel=BenAwad)
+- [Typescript & GraphQL | TypeORM, Type-GraphQL y ApolloServer](https://www.youtube.com/watch?v=mNsvOon1L_c&t=2508s&ab_channel=FaztCode)
+- [Typescript & GraphQL | TypeORM, Type-GraphQL y ApolloServer](https://www.youtube.com/watch?v=mNsvOon1L_c&t=2508s&ab_channel=FaztCode)
