@@ -33,6 +33,13 @@ export class CartResolver {
   @Mutation(() => Boolean)
   @Authorized()
   async createCart(@Ctx() ctx: IContext) {
+    if (!ctx.requestUser?._id) {
+      throw new Error('You must be a registered user to perform this action');
+    }
+    const cart = await CartModel.getUserCart(ctx.requestUser?._id);
+    if (cart) {
+      throw new Error('Cart already created');
+    }
     await EventStore.execute(new CartCreatedEvent({ cartId: ctx.requestUser?._id as string, userId: ctx.requestUser?._id as string }));
     return true;
   }
@@ -60,6 +67,10 @@ export class CartResolver {
   async updateAddress(@Arg('address') address: string, @Ctx() ctx: IContext) {
     if (!ctx.requestUser?._id) {
       throw new Error('You must be a registered user to perform this action');
+    }
+
+    if (!address?.length) {
+      throw new Error('You must provide an address string');
     }
     const cart = await CartModel.getUserCart(ctx.requestUser?._id);
     if (cart) {
