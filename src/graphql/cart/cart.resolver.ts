@@ -15,10 +15,18 @@ export class CartResolver {
   @Query(() => Cart)
   @Authorized()
   async getCart(@Ctx() ctx: IContext) {
-    return await CartModel.getUserCart(ctx.requestUser?._id as string);
+    if (!ctx.requestUser?._id) {
+      throw new Error('You must be a registered user to perform this action');
+    }
+    const cart = await CartModel.getUserCart(ctx.requestUser?._id as string);
+    if (!cart) {
+      throw new Error('No cart found');
+    }
+    return cart;
   }
 
   @Subscription({
+    nullable: true,
     subscribe: withFilter(
       () =>
         EventStore.listen<Cart>([
