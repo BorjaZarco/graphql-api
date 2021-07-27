@@ -11,5 +11,5 @@ RUN tsc
 
 
 EXPOSE 5000
-COPY ./environments/.env.prod ./.env
+COPY ./environments/.env.docker ./.env
 CMD ["node", "dist/index.js"]
