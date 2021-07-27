@@ -6,12 +6,14 @@
       {
         "url": "http://localhost:5000/graphql",
         "query": "mutation logIn($data: EmailInput!) {\n  logIn(data: $data)\n}\n",
+        "headers": [],
         "variables": "{ \n    \"data\": {\n        \"email\": \"test@gmail.com\",\n        \"password\": \"123456\"\n    }\n} ",
         "name": "log in"
       },
       {
         "url": "http://localhost:5000/graphql",
         "query": "mutation signUp($data: EmailInput!) {\n  signUp(data: $data)\n}\n",
+        "headers": [],
         "variables": "{ \n    \"data\": {\n        \"email\": \"test@gmail.com\",\n        \"password\": \"123456\"\n    }\n} ",
         "name": "sign up"
       },
