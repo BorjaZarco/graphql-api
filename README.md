@@ -212,6 +212,6 @@ This stores the items that need to be sent to a user. It will also store a payme
 
 - `createOrder`: it creates a new order. This order will contain the items that are in the user's cart at the moment the order is created. It will also store the address that the cart has at the moment is created. The cart must have at least one item and a deliver address when the order is created, otherwise it will throw an error.
 
-- `confirmPayment`: stores the confirment payment BLOB sent in the request. This may update the status of the order. A payment can be confirmed if the order is cancelled in order to store the payment blob just in case something went wrong and the quantity paid needs to be returned (eg. the order is cancelled before the payment is bank confirms the payment).
+- `confirmPayment`: stores the payment confirm BLOB sent in the request. This may update the status of the order. A payment can be confirmed if the order is cancelled in order to store the payment blob just in case something went wrong and the quantity paid needs to be returned (eg. the order is cancelled before the payment is bank confirms the payment). An order can be confirmed several times (to update the confirmation BLOB)
 
 - `cancelOrder`: cancels an order. This may update the status of the order. An order can't be cancelled if it is already cancelled.
