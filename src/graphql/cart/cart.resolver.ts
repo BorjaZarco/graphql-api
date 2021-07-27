@@ -7,6 +7,7 @@ import { CartModel } from './cart.model';
 import { Cart } from './dtos/cart.dto';
 import { ItemInput } from './dtos/item.dto';
 import { AddressUpdatedEvent } from './events/address-updated.event';
+import { CartClearedEvent } from './events/cart-cleared.event';
 import { CartCreatedEvent } from './events/cart-created.event';
 import { ItemUpdatedEvent } from './events/item-updated.event';
 @Resolver()
@@ -80,6 +81,24 @@ export class CartResolver {
         new CartCreatedEvent({ cartId: ctx.requestUser?._id as string, userId: ctx.requestUser?._id as string })
       )) as Cart;
       await EventStore.execute(new AddressUpdatedEvent({ cartId: newCart._id, address }));
+    }
+    return true;
+  }
+
+  @Mutation(() => String)
+  @Authorized()
+  async clearCart(@Ctx() ctx: IContext) {
+    if (!ctx.requestUser?._id) {
+      throw new Error('You must be a registered user to perform this action');
+    }
+    const cart = await CartModel.getUserCart(ctx.requestUser?._id);
+    if (cart) {
+      await EventStore.execute(new CartClearedEvent({ cartId: ctx.requestUser?._id as string }));
+    } else {
+      const newCart = (await EventStore.execute(
+        new CartCreatedEvent({ cartId: ctx.requestUser?._id as string, userId: ctx.requestUser?._id as string })
+      )) as Cart;
+      await EventStore.execute(new CartClearedEvent({ cartId: newCart._id }));
     }
     return true;
   }
