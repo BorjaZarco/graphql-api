@@ -1,5 +1,6 @@
 import { CartEntity } from '../../repostory/mongo/entitites/cart.entity';
 import { Cart } from './dtos/cart.dto';
+import { Item } from './dtos/item.dto';
 
 export class CartModel {
   static getCarts() {
@@ -23,5 +24,9 @@ export class CartModel {
       new: true,
       runValidators: true,
     }).exec();
+  }
+
+  static calculateTotalPrice(items: Item[] = []) {
+    return items.reduce((total, item) => total + (item.quantity || 0) * (item.price || 0), 0);
   }
 }
