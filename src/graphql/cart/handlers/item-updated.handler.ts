@@ -14,7 +14,8 @@ export class ItemUpdatedHandler {
         cart.items.push(eventData.item);
       }
 
-      return CartModel.updateCart(cart.id, { items: cart.items });
+      const itemsWithQuantity = cart.items.filter((item) => !!item.quantity);
+      return CartModel.updateCart(cart.id, { items: itemsWithQuantity, totalPrice: CartModel.calculateTotalPrice(cart.items) });
     }
   }
 }
