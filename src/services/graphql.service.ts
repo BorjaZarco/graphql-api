@@ -10,7 +10,6 @@ export class GraphqlService {
     return buildSchema({
       resolvers: [CartResolver, OrderResolver, UserResolver],
       authChecker: AuthMiddleware.check,
-      nullableByDefault: true,
     });
   }
 }
