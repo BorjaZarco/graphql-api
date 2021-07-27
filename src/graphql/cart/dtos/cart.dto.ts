@@ -9,7 +9,7 @@ export class Cart {
   @Field(() => ID)
   userId!: string;
 
-  @Field(() => ID)
+  @Field(() => String)
   address?: string;
 
   @Field(() => Float)
