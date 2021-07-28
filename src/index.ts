@@ -17,9 +17,10 @@ async function main() {
     const graphqlSchema = await GraphqlService.generateGraphqlSchema();
     const apolloServer = new ApolloServer({
       schema: graphqlSchema,
+      playground: process.env.ENV !== 'production',
       context: ({ req, res, connection }) => ({ req, res, connection }),
       formatError: (gqlError) => {
-        return { message: gqlError.message };
+        return process.env.ENV === 'production' ? { message: gqlError.message } : gqlError;
       },
       subscriptions: {
         path: '/subscriptions',
