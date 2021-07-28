@@ -41,7 +41,7 @@ $ yarn install
 
 ### Environments
 
-Once the instalation of dependencies is completed, it is required to configure some environment variables. This project is prepared for two environments by default: dev (development) and prod (production).
+Once the instalation of dependencies is completed, it is required to configure some environment variables. This project is prepared for two environments by default: dev (development) and prod (production). There is one special environment file `.env.docker`, which is what docker will use as environment configuration file.
 
 In order to set the environment variables for any environment, you will need to create its corresponding file under a `environments` folder, just as it is shown below:
 
@@ -49,11 +49,12 @@ In order to set the environment variables for any environment, you will need to 
 /environments
   .env.dev
   .env.prod
+  .env.docker
 ```
 
 The environment variables available to configure are the following:
 
-- `ENV`: The environment name.
+- `ENV`: The environment name. If the environment name is 'production', graphql playground is disabled. On 'production', fully detailed errors are disabled too for security reasons. The production error will only include a message, no stacktrace or internal information of the software.
 - `PORT`: Port on which the process will listen.
 - `JWT_SECRET`: JWT secret key. This is used to check if the authorization token provided by the client is valid.
 - `JWT_EXPIRATION`: JWT expiration time in seconds. Time a generated token remains valid.
@@ -207,6 +208,8 @@ The main point of the business. It consists on a set of items, an address to whi
 This stores the items that need to be sent to a user. It will also store a payment confirmation BLOB and a address to which the items will be delivered. A user can have more than one order at a time.
 
 #### Queries
+
+- `getOrders`: get all orders of a user.
 
 - `getOrder`: get an order by its id. The provided id must be of an order that belongs to the user that makes the request.
 

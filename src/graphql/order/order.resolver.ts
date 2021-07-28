@@ -1,5 +1,6 @@
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql';
 import { EventStore } from '../../core/event-store/event-store';
+import { UtilsService } from '../../services/utils.service';
 import { IContext } from '../../types/definitions/context';
 import { CartModel } from '../cart/cart.model';
 import { Order } from './dtos/order.dto';
@@ -31,7 +32,7 @@ export class OrderResolver {
       throw new Error('You must be a registered user to perform this action');
     }
 
-    if (!orderId.match(/^[0-9a-fA-F]{24}$/)) {
+    if (!UtilsService.isValidId(orderId)) {
       throw new Error('You must provide a valid id');
     }
     const order = await OrderModel.getUserOrder(orderId, ctx.requestUser?._id as string);
@@ -47,7 +48,7 @@ export class OrderResolver {
     if (!ctx.requestUser?._id) {
       throw new Error('You must be a registered user to perform this action');
     }
-    if (!orderId.match(/^[0-9a-fA-F]{24}$/)) {
+    if (!UtilsService.isValidId(orderId)) {
       throw new Error('You must provide a valid id');
     }
     const order = await OrderModel.getUserOrder(orderId, ctx.requestUser?._id as string);
@@ -86,6 +87,10 @@ export class OrderResolver {
     if (!ctx.requestUser?._id) {
       throw new Error('You must be a registered user to perform this action');
     }
+
+    if (!UtilsService.isValidId(orderId)) {
+      throw new Error('You must provide a valid id');
+    }
     const order = await OrderModel.getUserOrder(orderId, ctx.requestUser?._id);
     if (order) {
       await EventStore.execute(new PaymentConfirmedEvent({ orderId, paymentConfirmation }));
@@ -100,6 +105,10 @@ export class OrderResolver {
   async cancelOrder(@Arg('orderId') orderId: string, @Ctx() ctx: IContext) {
     if (!ctx.requestUser?._id) {
       throw new Error('You must be a registered user to perform this action');
+    }
+
+    if (!UtilsService.isValidId(orderId)) {
+      throw new Error('You must provide a valid id');
     }
     const order = await OrderModel.getUserOrder(orderId, ctx.requestUser?._id);
     if (!order) {
