@@ -209,6 +209,8 @@ This stores the items that need to be sent to a user. It will also store a payme
 
 #### Queries
 
+- `getOrders`: get all orders of a user.
+
 - `getOrder`: get an order by its id. The provided id must be of an order that belongs to the user that makes the request.
 
 - `getOrderStatus`: get an order current status. The possible status of an order are the following:
