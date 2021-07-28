@@ -65,7 +65,7 @@ An example of the configuration params will be the following:
 
 ```
 ENV=example
-PORT=3000
+PORT=5000
 JWT_SECRET=DEV_SECRET
 JWT_EXPIRATION=3600
 SALT_ROUNDS=10
