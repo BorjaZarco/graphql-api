@@ -108,7 +108,7 @@ $ docker run -p <CONTAINER_PORT>:<DOCKER_HOST>
 
 It is also provided a [docker compose prod environment file](./public/.env.compose) as example
 
-> Both docker images use the `prod` environment, so be sure to have it configured on `/environments/.env.prod`
+> Both docker images use the `docker` environment, so be sure to have it configured on `/environments/.env.docker`
 
 ### Mongo
 
